@@ -1,10 +1,26 @@
 "use strict";
 
-const express = require("express");
+import express from "express";
+import mongoose  from "mongoose";
+import cors from "cors";
+
 const morgan = require("morgan");
+require("dotenv").config();
+
 
 var usersRouter = require('./app/routes/users');
 var notesRouter = require('./app/routes/notes')
+
+
+// db
+mongoose
+  .connect(process.env.MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("DB connected"))
+  .catch((err) => console.log("DB CONNECTION ERROR => ", err));
+
 
 
 const app = express();
@@ -13,6 +29,11 @@ const app = express();
 // This will give us will log more info to the console. see https://www.npmjs.com/package/morgan
 app.use(morgan("dev"));
 app.use(express.json());
+app.use(
+    cors({
+      origin: ["http://localhost:3000"],
+    })
+  );
 
 
 app.use('/users', usersRouter);
