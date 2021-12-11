@@ -1,24 +1,48 @@
-import React from "react"
+import React from "react";
+import {useRouteMatch, Switch, Route} from "react-router-dom";
 import styled from "styled-components";
+import SideNavBar from "../components/layout/SideNavBar/SideNavBar";
+import NoteList from "../components/layout/NoteList/NoteList";
+import Note from "../components/layout/Note/Note";
+import PrivateRoute from "../utils/PrivateRoute";
 
 function NotesPage() {
-  return (
+
+    let { path, url } = useRouteMatch();
+
+
+    return (
+  <PrivateRoute>
     <Wrapper>
         <ContentWrapper>
-        Notes Page
+        <SideNavBar/>
+        <Switch>
+            <Route path={`${path}/all-notes`}>
+              <NoteList title="All Notes" />
+              <Route path={`${path}/all-notes/:id`}>
+                <Note />
+              </Route>
+            </Route>
+            <Route path={`${path}/trash`}>
+              <NoteList title="Trash" />
+              <Route path={`${path}/trash/:id`}>
+                <Note />
+              </Route>
+            </Route>
+          </Switch>
         </ContentWrapper>
-    </Wrapper>
+     </Wrapper>
+  </PrivateRoute>
   )
 }
 
 export default NotesPage;
 
 const ContentWrapper = styled.div`
-  /* max-width: 1234px; */
-  margin: 0 auto;
-  padding: 200px 30px;
+  /* padding-top: 30px; */
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-items: center;
+  height: 100vh;
 `
 const Wrapper = styled.div``;

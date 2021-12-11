@@ -1,16 +1,19 @@
-import React, { useState } from 'react';
-import { Redirect } from "react-router-dom";
+import React, { useContext, useState } from 'react';
+import { Redirect, useHistory } from "react-router-dom";
 import styled from 'styled-components';
 import { register } from '../utils/api-client';
+import { UserContext } from '../context/UserContext';
 
 
 function RegisterPage() {
 
+    const [state]=useContext(UserContext);
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [redirectToLogin, setRedirectToLogin] = useState(false);
     const [error, setError] = useState(false);
+    const history = useHistory();
 
   const HandleSubmit = async (evt) => {
     evt.preventDefault();
@@ -22,6 +25,8 @@ function RegisterPage() {
       setError(true)
     }
   }
+
+  if (state && state.token) history.push("/notes");
 
   if (redirectToLogin)
     return <Redirect to={{ pathname: "/login" }}/>
@@ -72,7 +77,7 @@ function RegisterPage() {
                 <div>
                   <div>
                     <div>
-                      <a onClick={e => setRedirectToLogin(true)}>Login or</a>
+                      <a href="/login">Login or</a>
                     </div>
                     <div>
                       <Button type="submit">Register</Button>

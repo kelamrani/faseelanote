@@ -1,18 +1,29 @@
-import React from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {Link, useHistory } from "react-router-dom";
 import styled from "styled-components";
+import {logout} from "../../utils/api-client";
+import { UserContext } from '../../context/UserContext'
 
 
 
 
 const Header = () =>{
 
+    const [current, setCurrent] = useState("");
+
+    const [state, setState] = useContext(UserContext);
     const history = useHistory();
-    const handleClick = () => {
 
-history.push("/");
+    const logout = () => {
+        window.localStorage.removeItem('auth');
+        setState(null);
+      };
 
-    }
+     useEffect(() => {
+        process.browser && setCurrent(window.location.pathname);
+     }, [process.browser && window.location.pathname]);
+
+
     return (
     <Wrapper>
 
@@ -20,14 +31,42 @@ history.push("/");
         <img src="/images/logos/logo.svg" alt="Logo" />
       </Link>
 
-      <MenuWrapper count={1} >
-        <Link to="/register" onClick={handleClick}>
-            <MenuItem title="register">
-                <img src="/images/icons/credit.svg" alt="register" />
-                    register
-            </MenuItem>
-        </Link>
-      </MenuWrapper>
+        {
+            state !==null ? (
+                    <MenuWrapper count={2} >
+                        <StyledLink to="/user/dashboard" >
+                            <MenuItem title="logout">
+                                <img src="/images/icons/credit.svg" alt="logout" />
+                                    { state && state.user && state.user.name }
+                            </MenuItem>
+                        </StyledLink>
+                        <StyledLink to="/" onClick={logout}>
+                            <MenuItem title="logout">
+                                <img src="/images/icons/credit.svg" alt="logout" />
+                                    logout
+                            </MenuItem>
+                        </StyledLink>
+                    </MenuWrapper>
+                            ):
+                    <MenuWrapper count={2} >
+                        <StyledLink to="/register">
+                            <MenuItem title="register">
+                                <img src="/images/icons/credit.svg" alt="register" />
+                                    register
+                            </MenuItem>
+                        </StyledLink>
+                        <StyledLink to="/login" >
+                            <MenuItem title="login">
+                                <img src="/images/icons/credit.svg" alt="login" />
+                                    login
+                            </MenuItem>
+                        </StyledLink>
+                    </MenuWrapper>
+
+    }
+
+
+
 
     </Wrapper>)
 
@@ -36,7 +75,7 @@ history.push("/");
 
 const Wrapper = styled.div`
   position: absolute;
-  top: 60px;
+  top: 10px;
   display: grid;
   grid-template-columns: 44px auto;
   width: 100%;
@@ -71,6 +110,9 @@ const MenuItem = styled.div`
   }
 `;
 
+const StyledLink = styled(Link)`
+
+`;
 
 
 

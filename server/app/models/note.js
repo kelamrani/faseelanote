@@ -5,6 +5,7 @@ let noteSchema = new mongoose.Schema({
     body: String,
     created_at: {type: Date, default: Date.now},
     updated_at: {type: Date, default: Date.now},
+    archive: { type: Number, default: 0},
     author: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',

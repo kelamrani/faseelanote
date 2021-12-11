@@ -29,6 +29,26 @@ router.get('/search', withAuth, async (req, res) => {
     }
 });
 
+
+router.get('/', withAuth, async (req, res) => {
+    try {
+        let notes = await Note.find({author: req.user._id, archive: 0})
+        res.json(notes)
+    } catch (error) {
+        res.json({error: error}).status(500);
+    }
+})
+router.get('/trash', withAuth, async (req, res) => {
+    try {
+        let notes = await Note.find({author: req.user._id, archive: 1});
+
+        res.json(notes)
+
+    } catch (error) {
+        res.json({error: error}).status(500);
+    }
+})
+
 router.get('/:id', withAuth, async (req, res) => {
     try {
         const {id} = req.params;
@@ -42,24 +62,14 @@ router.get('/:id', withAuth, async (req, res) => {
         res.status(500).json({error: 'Problem to get a note.'});
     }
 })
-
-router.get('/', withAuth, async (req, res) => {
-    try {
-        let notes = await Note.find({author: req.user._id})
-        res.json(notes)
-    } catch (error) {
-        res.json({error: error}).status(500);
-    }
-})
-
 router.put('/:id', withAuth, async (req, res) => {
-    const {title, body} = req.body;
+    const {title, body, archive} = req.body;
     const {id} = req.params;
 
     try {
         let note = await Note.findById(id);
         if(isOwner(req.user, note)) {
-            let note = await Note.findOneAndUpdate({_id: id}, {$set: {title: title, body: body}}, {upsert: true, 'new': true})
+            let note = await Note.findOneAndUpdate({_id: id}, {$set: {title: title, body: body, archive: archive}}, {upsert: true, 'new': true})
             res.json(note);
         } else {
             res.status(403).json({error: 'Permission denied.'});
@@ -77,7 +87,7 @@ router.delete('/:id', withAuth, async (req, res) => {
         let note = await Note.findById(id);
         if(isOwner(req.user, note)) {
             await note.delete();
-            res.json({message: 'Ok, nota deletada com sucesso'}).status(204)
+            res.json({message: 'Ok, note deleted'}).status(204)
         } else {
             res.status(403).json({error: 'Permission denied.'});
         }

@@ -1,16 +1,15 @@
-import React, { Fragment, useState, useContext } from 'react';
-import {Redirect, useHistory} from 'react-router-dom';
+import React, { useState, useContext } from 'react';
+import { useHistory, Redirect, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import { login } from '../utils/api-client';
-import { UserContext } from '../context'
+import { UserContext } from '../context/UserContext'
 
 function LoginPage() {
+    const location = useLocation();
 
   const [state, setState] = useContext(UserContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [redirectToRegister, setRedirectToRegister] = useState(false);
-  const [redirectToNotes, setRedirectToNotes] = useState(false);
   const [error, setError] = useState(false);
 
   const history = useHistory();
@@ -33,10 +32,11 @@ function LoginPage() {
     }
   }
 
-  if(redirectToRegister)
-    return <Redirect to={{pathname: "/register"}}/>
-  else if(redirectToNotes)
-    return <Redirect to={{pathname: "/notes"}}/>
+//   if (state && state.token) {
+
+//       return (<Redirect to='/notes' key={location.key}/>);
+//   }
+
 
   return (
     <Wrapper>
@@ -71,10 +71,10 @@ function LoginPage() {
                 <div>
                   <div>
                     <div>
-                      <a className="button is-white has-text-custom-purple" onClick={e => setRedirectToRegister(true)}>Register or</a>
+                      <a href="/register">Register or</a>
                     </div>
                     <div>
-                      <Button color="custom-purple" outlined>Login</Button>
+                      <Button>Login</Button>
                     </div>
                   </div>
                 </div>

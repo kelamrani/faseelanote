@@ -14,3 +14,68 @@ export const logout = () => {
   window.localStorage.removeItem('auth');
 
 };
+
+
+
+
+export const indexNotes = async () => {
+    let token;
+    let auth = JSON.parse(localStorage.getItem('auth')) || null ;
+    token = auth.token;
+    const {data} = await client.get('/notes', {
+    headers: {'x-access-token': token}
+    });
+    console.log(data);
+    return data;
+}
+
+export const indexTrash = async () => {
+    let token;
+    let auth = JSON.parse(localStorage.getItem('auth')) || null ;
+    token = auth.token;
+    const {data} = await client.get('/notes/trash', {
+    headers: {'x-access-token': token}
+    });
+    console.log(data);
+    return data;
+}
+
+
+export const createNote = async () => {
+    let token;
+    let auth = JSON.parse(localStorage.getItem('auth')) || null ;
+    token = auth.token;
+    const {data} = await client.post('/notes', {'title': 'New Note', 'body': '...'}, {
+    headers: {'x-access-token': token}
+    });
+    return data;
+}
+
+
+export const deleteNote = async (id) => {
+    let token;
+    let auth = JSON.parse(localStorage.getItem('auth')) || null ;
+    token = auth.token;
+    await client.delete(`/notes/${id}`,
+    { headers: {'x-access-token': token}
+});
+}
+
+export const updateNote = async (id, params) => {
+    let token;
+    let auth = JSON.parse(localStorage.getItem('auth')) || null ;
+    token = auth.token;
+    client.put(`/notes/${id}`, params, {
+    headers: {'x-access-token': token}
+});
+}
+
+
+export const searchNote = async (query) => {
+    let token;
+    let auth = JSON.parse(localStorage.getItem('auth')) || null ;
+    token = auth.token;
+    await client.get(`/notes/search?query=${query}`, {
+    headers: {'x-access-token': token}
+});
+}

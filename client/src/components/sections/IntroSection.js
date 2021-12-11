@@ -3,10 +3,12 @@ import styled, { keyframes } from "styled-components"
 import { themes } from "../styles/ColorStyles"
 import { H1, MediumText } from "../styles/TextStyles"
 import CreateAccountButton from "../buttons/CreateAccountButton"
-
+import Header from '../layout/Header'
 function IntroSection() {
   return (
     <Wrapper>
+              <Header />
+
       <ContentWrapper>
         <TextWrapper>
           <Title>
