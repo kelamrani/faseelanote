@@ -20,7 +20,6 @@ const NoteList = (props) => {
     }, [match.url])
 
     const getNotes = async () => {
-        let endpoint = '';
         let response;
         if (match.url == '/notes/all-notes') {
             response = await indexNotes();
