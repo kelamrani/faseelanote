@@ -63,13 +63,14 @@ router.get('/:id', withAuth, async (req, res) => {
     }
 })
 router.put('/:id', withAuth, async (req, res) => {
-    const {title, body, archive} = req.body;
+    // const {title, body, archive} = req.body;
+    const {title, archive} = req.body;
     const {id} = req.params;
 
     try {
         let note = await Note.findById(id);
         if(isOwner(req.user, note)) {
-            let note = await Note.findOneAndUpdate({_id: id}, {$set: {title: title, body: body, archive: archive}}, {upsert: true, 'new': true})
+            let note = await Note.findOneAndUpdate({_id: id}, {$set: {title: title, archive: archive}}, {upsert: true, 'new': true})
             res.json(note);
         } else {
             res.status(403).json({error: 'Permission denied.'});

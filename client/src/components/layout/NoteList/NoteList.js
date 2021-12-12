@@ -34,12 +34,12 @@ const NoteList = (props) => {
             return false;
         }
         notesContext.notesDispatch({ type: 'getAllNotesSuccess', payload: response });
-        if (response.length > 0) {
-            history.push({
-                pathname: `${match.url}/${response[0]._id}`,
-                note: response[0]
-            })
-        }
+        // if (response.length > 0) {
+        //     history.push({
+        //         pathname: `${match.url}/${response[0]._id}`,
+        //         note: response[0]
+        //     })
+        // }
     }
 
     return (
@@ -67,9 +67,9 @@ const NoteList = (props) => {
                                 <div className="note-card__title">
                                     {note.title}
                                 </div>
-                                <div className="note-card__desc">
+                                {/* <div className="note-card__desc">
                                     {note.body}
-                                </div>
+                                </div> */}
                             </div>
                             <div className="note-card__date">
                                 {listFormatDate(note.updated_at)}

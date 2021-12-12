@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 
 let noteSchema = new mongoose.Schema({
     title: String,
-    body: String,
+    // body: String,
+    body: Object,
     created_at: {type: Date, default: Date.now},
     updated_at: {type: Date, default: Date.now},
     archive: { type: Number, default: 0},
@@ -13,6 +14,6 @@ let noteSchema = new mongoose.Schema({
     }
 })
 
-noteSchema.index({'title': 'text', 'body': 'text'})
+noteSchema.index({'title': 'text'})
 
 module.exports = mongoose.model('Note', noteSchema)

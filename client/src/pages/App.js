@@ -1,5 +1,5 @@
 import React from "react"
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Layout from "../components/layout/layout";
 import IntroSection from "../components/sections/IntroSection";
 import PrivateRoute from "../utils/PrivateRoute";
@@ -14,7 +14,7 @@ function App() {
   return (
   <UserProvider>
       <NotesProvider>
-    <Router>
+    <BrowserRouter>
             <Layout>
                 <Switch>
                 <Route exact path="/">
@@ -31,7 +31,7 @@ function App() {
                 </Route>
                 </Switch>
             </Layout>
-    </Router>
+    </BrowserRouter>
     </NotesProvider>
   </UserProvider>
   );

@@ -5,6 +5,7 @@ import SideNavBar from "../components/layout/SideNavBar/SideNavBar";
 import NoteList from "../components/layout/NoteList/NoteList";
 import Note from "../components/layout/Note/Note";
 import PrivateRoute from "../utils/PrivateRoute";
+import TextEditor from "../components/layout/TextEditor/TextEditor";
 
 function NotesPage() {
 
@@ -17,17 +18,20 @@ function NotesPage() {
         <ContentWrapper>
         <SideNavBar/>
         <Switch>
+            <Route path={`${path}/all-notes/:id`}>
+                <Note />
+                {/* <TextEditor /> */}
+            </Route>
             <Route path={`${path}/all-notes`}>
               <NoteList title="All Notes" />
-              <Route path={`${path}/all-notes/:id`}>
+            </Route>
+
+            <Route path={`${path}/trash/:id`}>
                 <Note />
-              </Route>
+                {/* <TextEditor /> */}
             </Route>
             <Route path={`${path}/trash`}>
               <NoteList title="Trash" />
-              <Route path={`${path}/trash/:id`}>
-                <Note />
-              </Route>
             </Route>
           </Switch>
         </ContentWrapper>

@@ -45,7 +45,7 @@ export const createNote = async () => {
     let token;
     let auth = JSON.parse(localStorage.getItem('auth')) || null ;
     token = auth.token;
-    const {data} = await client.post('/notes', {'title': 'New Note', 'body': '...'}, {
+    const {data} = await client.post('/notes', {'title': 'New Note', 'body': ''}, {
     headers: {'x-access-token': token}
     });
     return data;
