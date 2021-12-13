@@ -9,6 +9,18 @@ export const login = async (params) => {
   return await client.post('users/login', params);
 };
 
+export const indexUsers = async () => {
+    let token;
+    let auth = JSON.parse(localStorage.getItem('auth')) || null ;
+    token = auth.token;
+    const { data } = await client.get("/users", {
+        headers: {'x-access-token': token}
+        });
+    console.log(data);
+    return data;
+
+}
+
 
 export const logout = () => {
   window.localStorage.removeItem('auth');
