@@ -28,8 +28,9 @@
     margin: 0 10px;
 }
 .note .note__header .note__header-action-btn .action-btn:hover {
-    opacity: 1;
     cursor: pointer;
+    color: #2FB5FC;
+
 }
 .note .note__body {
     flex: 1;

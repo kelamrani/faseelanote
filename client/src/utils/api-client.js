@@ -16,7 +16,7 @@ export const indexUsers = async () => {
     const { data } = await client.get("/users", {
         headers: {'x-access-token': token}
         });
-    console.log(data);
+    // console.log(data);
     return data;
 
 }
@@ -52,6 +52,17 @@ export const indexTrash = async () => {
     return data;
 }
 
+export const indexShared = async () => {
+    let token;
+    let auth = JSON.parse(localStorage.getItem('auth')) || null ;
+    token = auth.token;
+    const {data} = await client.get('/notes/shared-with-me', {
+    headers: {'x-access-token': token}
+    });
+    console.log(data);
+    return data;
+}
+
 
 export const createNote = async () => {
     let token;
@@ -70,6 +81,15 @@ export const deleteNote = async (id) => {
     token = auth.token;
     await client.delete(`/notes/${id}`,
     { headers: {'x-access-token': token}
+});
+}
+
+export const shareNote = async (params) => {
+    let token;
+    let auth = JSON.parse(localStorage.getItem('auth')) || null ;
+    token = auth.token;
+    client.put('/notes/share-note', params, {
+    headers: {'x-access-token': token}
 });
 }
 

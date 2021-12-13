@@ -28,14 +28,14 @@ const Note = () => {
     const [isArchive, setIsArchive] = useState(0);
     const [error, setError] = useState(null);
 
-    useEffect(() => {
-        if (location.note) {
-            setTitle(location.note.title)
-            // setBody(location.note.body)
-            setUpdatedAt(location.note.updated_at)
-            setIsArchive(location.note.archive)
-        }
-    }, [location.note])
+    // useEffect(() => {
+    //     if (location.note) {
+    //         setTitle(location.note.title)
+    //         // setBody(location.note.body)
+    //         setUpdatedAt(location.note.updated_at)
+    //         setIsArchive(location.note.archive)
+    //     }
+    // }, [location.note])
 
     useEffect(() => {
         if (notesContext.notesState.length > 0) {
@@ -137,8 +137,8 @@ const Note = () => {
                     {!isArchive ?
                     (
                         <>
-                        <div className="action-btn" onClick={handleShareNote}>
-                            <Share/>
+                        <div className="action-btn">
+                            <Share noteId={params.id}/>
                         </div>
                         <div className="action-btn" onClick={handleArchiveNote}>
                             <FontAwesomeIcon icon={faArchive} />

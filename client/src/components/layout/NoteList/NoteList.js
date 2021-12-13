@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 import { NotesContext } from './../../../context/NotesContext';
 import { listFormatDate } from './../../../utils/helpers';
-import { indexNotes, indexTrash } from '../../../utils/api-client';
+import { indexNotes, indexTrash, indexShared } from '../../../utils/api-client';
 
 const NoteList = (props) => {
     const [error, setError] = useState(null)
@@ -25,6 +25,8 @@ const NoteList = (props) => {
             response = await indexNotes();
         } else if (match.url == '/notes/trash') {
             response = await indexTrash();
+        } else if (match.url == '/notes/shared-with-me') {
+            response = await indexShared();
         } else {
             return;
         }

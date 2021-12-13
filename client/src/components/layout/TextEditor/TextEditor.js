@@ -6,7 +6,7 @@ import { useParams } from 'react-router-dom';
 import "./styles.css";
 
 // Autosave Interval
-const SAVE_INTERVAL_MS = 5000;
+const SAVE_INTERVAL_MS = 2000;
 
 // Quill Toolbar Settings
 const TOOLBAR_OPTIONS = [
@@ -52,7 +52,6 @@ export default function TextEditor({noteId}) {
         if (socket == null || quill == null) return
 
         socket.once("load-document", document => { //no need for return since "socket.once()" cleans up after running once
-            console.log(document);
             quill.setContents(document)
             quill.enable()
         })

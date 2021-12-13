@@ -8,7 +8,7 @@ const withAuth = require('../middlewares/auth')
 
 
 router.post('/register', async function(req, res) {
-        console.log("REGISTER ENDPOINT => ", req.body);
+        // console.log("REGISTER ENDPOINT => ", req.body);
         const { name, email, password } = req.body;
         // validation
         if (!name) return res.status(400).send("Name is required");

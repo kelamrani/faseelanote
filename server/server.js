@@ -58,21 +58,16 @@ io.on("connect", (socket) => {
     console.log("SOCKET>IO", socket.id);
     // For given noteId:
     socket.on("get-document", async noteId => {
-        console.log("noteId",noteId);
         const document = await findDocument(noteId) //DB (refer helper function)
-        // console.log("document", document);
-        console.log("room", noteId);
     socket.join(noteId); //isolating into "own" room
     socket.emit("load-document", document.body)
 
     socket.on("send-changes", delta => {
-        console.log(delta);
         socket.broadcast.to(noteId).emit("receive-changes", delta) // "to(noteId)" emits to the specific "room"
     })
 
     socket.on("save-document", async data => {
         const result = await Note.findByIdAndUpdate(noteId, { body: data });
-        console.log("save document", result);
     })
 })
 })

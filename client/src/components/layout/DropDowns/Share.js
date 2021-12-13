@@ -2,16 +2,16 @@ import React, { useContext, useState, useEffect } from "react";
 import styled from "styled-components";
 import { Link, useRouteMatch, useHistory } from "react-router-dom";
 import { themes } from "../../styles/ColorStyles";
-import { indexUsers } from "../../../utils/api-client";
+import { indexUsers, shareNote } from "../../../utils/api-client";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faShareSquare } from '@fortawesome/free-solid-svg-icons'
 
 
-const Share = () => {
+const Share = ({noteId}) => {
+
 
     const [users, setUsers] = useState();
     const [error, setError] = useState(null)
-    const match = useRouteMatch();
     const history = useHistory();
 
     useEffect(() => {
@@ -21,7 +21,7 @@ const Share = () => {
     const getUsers = async () => {
         let response;
         response = await indexUsers();
-        console.log(response);
+        // console.log(response);
 
         if (response.error) {
             setError(response.error);
@@ -30,8 +30,23 @@ const Share = () => {
         setUsers(response);
     };
 
+    const handleShare = async (user) => {
 
-  return (
+        // console.log(user);
+
+
+        const response = await shareNote({user: user, id:noteId });
+        if (response?.error) {
+            setError(response.error);
+            return false;
+        }
+        alert(`Note shared with , ${user.name}`);
+
+
+    }
+
+
+    return (
     <Wrapper>
       <Hover>
         <div>
@@ -42,7 +57,7 @@ const Share = () => {
         <UlWrapper style={{ maxHeight: 500, overflow: "auto" }}>
           {users?.map((user) => (
             <li key={user._id}>
-                <ItemButton type="button">{user.name}</ItemButton>
+                <ItemButton type="button" onClick={()=> handleShare(user)}>{user.name}</ItemButton>
             </li>
           ))}
         </UlWrapper>

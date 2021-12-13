@@ -49,6 +49,17 @@ router.get('/trash', withAuth, async (req, res) => {
     }
 })
 
+router.get('/shared-with-me', withAuth, async (req, res) => {
+    try {
+        let notes = await Note.find({sharedwith: req.user._id});
+
+        res.json(notes)
+
+    } catch (error) {
+        res.json({error: error}).status(500);
+    }
+})
+
 router.get('/:id', withAuth, async (req, res) => {
     try {
         const {id} = req.params;
@@ -62,6 +73,30 @@ router.get('/:id', withAuth, async (req, res) => {
         res.status(500).json({error: 'Problem to get a note.'});
     }
 })
+
+router.put('/share-note', withAuth, async (req, res) => {
+    console.log("share-note ENDPOINT => ", req.body);
+
+
+    try {
+        let note = await Note.findById(req.body.id)
+        if(isOwner(req.user, note)) {
+            let note = await Note.findByIdAndUpdate(
+            req.body.id,
+            {
+            $addToSet: { sharedwith: req.body.user._id },
+            }
+            );
+            console.log(note);
+            res.json(note);
+        } else {
+            res.status(403).json({error: 'Permission denied.'});
+        }
+    } catch (err) {
+        console.log(err);
+    }
+})
+
 router.put('/:id', withAuth, async (req, res) => {
     // const {title, body, archive} = req.body;
     const {title, archive} = req.body;
@@ -80,6 +115,8 @@ router.put('/:id', withAuth, async (req, res) => {
         res.status(500).json({error: 'Problem to update a note.'});
     }
 })
+
+
 
 router.delete('/:id', withAuth, async (req, res) => {
     const {id} = req.params;

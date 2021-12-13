@@ -1,7 +1,7 @@
 .container .ql-editor {
     /* Page Styling */
     width: 8.5in;
-    min-height: 11in;
+    height: 70vh;
     padding: 1in;
     margin: 1rem;
     box-shadow: 0 0 5px 0 rgba(0, 0, 0, .5);

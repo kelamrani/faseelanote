@@ -3,9 +3,9 @@ import {useRouteMatch, Switch, Route} from "react-router-dom";
 import styled from "styled-components";
 import SideNavBar from "../components/layout/SideNavBar/SideNavBar";
 import NoteList from "../components/layout/NoteList/NoteList";
+import Folders from "../components/layout/Folders/Folders"
 import Note from "../components/layout/Note/Note";
 import PrivateRoute from "../utils/PrivateRoute";
-import TextEditor from "../components/layout/TextEditor/TextEditor";
 
 function NotesPage() {
 
@@ -20,7 +20,6 @@ function NotesPage() {
         <Switch>
             <Route path={`${path}/all-notes/:id`}>
                 <Note />
-                {/* <TextEditor /> */}
             </Route>
             <Route path={`${path}/all-notes`}>
               <NoteList title="All Notes" />
@@ -28,10 +27,18 @@ function NotesPage() {
 
             <Route path={`${path}/trash/:id`}>
                 <Note />
-                {/* <TextEditor /> */}
             </Route>
             <Route path={`${path}/trash`}>
               <NoteList title="Trash" />
+            </Route>
+            <Route path={`${path}/shared-with-me/:id`}>
+                <Note />
+            </Route>
+            <Route path={`${path}/shared-with-me`}>
+              <NoteList title="shared with me" />
+            </Route>
+            <Route path={`${path}/folders`}>
+                <Folders />
             </Route>
           </Switch>
         </ContentWrapper>

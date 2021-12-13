@@ -75,7 +75,7 @@ const SideNavBar = () => {
                             </NavLink>
                         </li>
                         <li>
-                            <NavLink to="/folders">
+                            <NavLink to="/notes/folders">
                                 <FontAwesomeIcon className="icon" icon={faFolder} /> Folders
                             </NavLink>
                         </li>
@@ -85,7 +85,7 @@ const SideNavBar = () => {
                             </NavLink>
                         </li>
                         <li>
-                            <NavLink to="/notes/shared">
+                            <NavLink to="/notes/shared-with-me">
                                 <FontAwesomeIcon className="icon" icon={faShareAlt} /> shared with Me
                             </NavLink>
                         </li>
