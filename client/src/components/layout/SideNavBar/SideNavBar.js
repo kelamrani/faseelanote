@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faAngleDown, faSearch, faPlus, faStar, faStickyNote, faTrash, faSignOutAlt } from '@fortawesome/free-solid-svg-icons'
+import { faAngleDown, faSearch, faPlus, faFolder, faStickyNote, faTrash, faSignOutAlt, faShareAlt} from '@fortawesome/free-solid-svg-icons'
 
 import './Sidenavbar.css';
 import { NavLink, useHistory } from 'react-router-dom'
@@ -68,29 +68,15 @@ const SideNavBar = () => {
                 </div>
                 <div className="sidenavbar-top__menu-item">
                     <ul>
-                        <li>
-                            <NavLink to="/dummy-1">
-                                <FontAwesomeIcon className="icon" icon={faStar} /> Dummy
-                            </NavLink>
-                        </li>
+
                         <li>
                             <NavLink to="/notes/all-notes">
                                 <FontAwesomeIcon className="icon" icon={faStickyNote} /> All Notes
                             </NavLink>
                         </li>
                         <li>
-                            <NavLink to="/dummy-2">
-                                <FontAwesomeIcon className="icon" icon={faStar} /> Dummy
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink to="/dummy-3">
-                                <FontAwesomeIcon className="icon" icon={faStar} /> Dummy
-                            </NavLink>
-                        </li>
-                        <li>
-                            <NavLink to="/dummy-4">
-                                <FontAwesomeIcon className="icon" icon={faStar} /> Dummy
+                            <NavLink to="/folders">
+                                <FontAwesomeIcon className="icon" icon={faFolder} /> Folders
                             </NavLink>
                         </li>
                         <li>
@@ -99,8 +85,8 @@ const SideNavBar = () => {
                             </NavLink>
                         </li>
                         <li>
-                            <NavLink to="/dummy-5">
-                                <FontAwesomeIcon className="icon" icon={faStar} /> Dummy
+                            <NavLink to="/notes/shared">
+                                <FontAwesomeIcon className="icon" icon={faShareAlt} /> shared with Me
                             </NavLink>
                         </li>
                     </ul>

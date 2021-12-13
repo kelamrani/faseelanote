@@ -3,7 +3,9 @@ var router = express.Router();
 require('dotenv').config();
 import User from "../models/user";
 import { hashPassword, comparePassword } from "../utils/auth";
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
+const withAuth = require('../middlewares/auth')
+
 
 router.post('/register', async function(req, res) {
         console.log("REGISTER ENDPOINT => ", req.body);
@@ -59,6 +61,15 @@ router.post('/register', async function(req, res) {
         }
 
   })
+
+  router.get('/', withAuth, async (req, res) => {
+    try {
+        let users = await User.find({_id: {$nin:  req.user._id}}).select("_id name");
+        res.json(users)
+    } catch (error) {
+        res.json({error: error}).status(500);
+    }
+})
 
 
 

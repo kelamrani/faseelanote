@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArchive, faBackward, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { faArchive, faBackward, faTrash, faShareSquare } from '@fortawesome/free-solid-svg-icons'
 import './Note.css';
 import {
     useLocation,
@@ -14,6 +14,7 @@ import { deleteNote, updateNote } from '../../../utils/api-client';
 import ReactQuill from 'react-quill'; // ES6
 import 'react-quill/dist/quill.snow.css'; // ES6
 import TextEditor from '../TextEditor/TextEditor';
+import Share from '../DropDowns/Share';
 
 
 const Note = () => {
@@ -86,6 +87,12 @@ const Note = () => {
         history.push(`/notes/all-notes`)
     }
 
+    const handleShareNote = async () => {
+
+        resetState();
+        history.push(`/notes/all-notes`)
+    }
+
     const handleUnArchiveNote = async () => {
         let query = {};
         query['title']=title;
@@ -129,9 +136,14 @@ const Note = () => {
                 <div className="note__header-action-btn">
                     {!isArchive ?
                     (
+                        <>
+                        <div className="action-btn" onClick={handleShareNote}>
+                            <Share/>
+                        </div>
                         <div className="action-btn" onClick={handleArchiveNote}>
                             <FontAwesomeIcon icon={faArchive} />
                         </div>
+                        </>
                     ) :
                     (
                         <>
