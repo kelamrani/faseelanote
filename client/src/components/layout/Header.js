@@ -1,7 +1,6 @@
-import React, {useContext, useEffect, useState} from "react";
-import {Link, useHistory } from "react-router-dom";
+import React, {useContext} from "react";
+import {Link} from "react-router-dom";
 import styled from "styled-components";
-import {logout} from "../../utils/api-client";
 import { UserContext } from '../../context/UserContext'
 
 
@@ -9,19 +8,14 @@ import { UserContext } from '../../context/UserContext'
 
 const Header = () =>{
 
-    const [current, setCurrent] = useState("");
 
     const [state, setState] = useContext(UserContext);
-    const history = useHistory();
 
     const logout = () => {
         window.localStorage.removeItem('auth');
         setState(null);
       };
 
-     useEffect(() => {
-        process.browser && setCurrent(window.location.pathname);
-     }, [process.browser && window.location.pathname]);
 
 
     return (
@@ -36,7 +30,7 @@ const Header = () =>{
                     <MenuWrapper count={2} >
                         <StyledLink to="/user/dashboard" >
                             <MenuItem title="logout">
-                                <img src="/images/icons/credit.svg" alt="logout" />
+                                <img src="/images/icons/credit.svg" alt="user dashboard" />
                                     { state && state.user && state.user.name }
                             </MenuItem>
                         </StyledLink>

@@ -9,7 +9,7 @@ import PrivateRoute from "../utils/PrivateRoute";
 
 function NotesPage() {
 
-    let { path, url } = useRouteMatch();
+    let { path } = useRouteMatch();
 
 
     return (

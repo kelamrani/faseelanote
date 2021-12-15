@@ -75,7 +75,6 @@ router.get('/:id', withAuth, async (req, res) => {
 })
 
 router.put('/share-note', withAuth, async (req, res) => {
-    console.log("share-note ENDPOINT => ", req.body);
 
 
     try {
@@ -87,7 +86,6 @@ router.put('/share-note', withAuth, async (req, res) => {
             $addToSet: { sharedwith: req.body.user._id },
             }
             );
-            console.log(note);
             res.json(note);
         } else {
             res.status(403).json({error: 'Permission denied.'});
@@ -98,7 +96,6 @@ router.put('/share-note', withAuth, async (req, res) => {
 })
 
 router.put('/:id', withAuth, async (req, res) => {
-    // const {title, body, archive} = req.body;
     const {title, archive} = req.body;
     const {id} = req.params;
 

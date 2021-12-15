@@ -7,9 +7,10 @@ import { NavLink, useHistory } from 'react-router-dom'
 import { NotesContext } from '../../../context/NotesContext';
 import { UserContext } from '../../../context/UserContext';
 import { createNote } from '../../../utils/api-client';
+import { toast } from 'react-toastify';
 
 const SideNavBar = () => {
-    const [state, setState] = useContext(UserContext);
+    const [state] = useContext(UserContext);
 
     const notesContext = useContext(NotesContext);
     const history = useHistory();
@@ -17,9 +18,9 @@ const SideNavBar = () => {
 
     const handleCreateNote = async () => {
         const response = await createNote();
-        // console.log(response);
         if (response.error) {
             setError(response.error);
+            toast.error(error);
             return false;
         }
         if(response._id){
@@ -45,6 +46,7 @@ const SideNavBar = () => {
             <div className="sidenavbar-top">
                 <div className="sidenavbar-top__profile">
                     <div className="profile-icon">
+                        {/* placeholder for a user Avatar */}
                         A
                     </div>
                     <div className="profile-title">

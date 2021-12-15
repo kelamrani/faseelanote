@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import Quill from "quill";
 import "quill/dist/quill.snow.css";
 import { io } from 'socket.io-client';
-import { useParams } from 'react-router-dom';
 import "./styles.css";
 
 // Autosave Interval
@@ -24,7 +23,6 @@ const TOOLBAR_OPTIONS = [
 
 export default function TextEditor({noteId}) {
 
-    console.log(noteId);
 
     const [socket, setSocket] = useState();
     const [quill, setQuill] = useState();
@@ -36,7 +34,6 @@ export default function TextEditor({noteId}) {
     // useEffect handles socket connection and disconnection (run once)
     useEffect(() => {
         const s = io("http://localhost:8000"); //server url
-        // console.log(s);
         setSocket(s)
 
         return () => {

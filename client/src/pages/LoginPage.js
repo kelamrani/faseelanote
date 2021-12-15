@@ -1,106 +1,143 @@
-import React, { useState, useContext } from 'react';
-import { useHistory, Redirect, useLocation } from 'react-router-dom';
+import React, { useState, useContext, useEffect } from 'react';
+import { useHistory, Link  } from 'react-router-dom';
 import styled from 'styled-components';
 import { login } from '../utils/api-client';
-import { UserContext } from '../context/UserContext'
+import { UserContext } from '../context/UserContext';
+import { themes } from "../components/styles/ColorStyles";
+import { toast } from "react-toastify";
+
 
 function LoginPage() {
-    const location = useLocation();
+    const [loading, setLoading] = useState(false);
+    const [state, setState] = useContext(UserContext);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const history = useHistory();
 
-  const [state, setState] = useContext(UserContext);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState(false);
+    useEffect(()=>{
+        if (state && state.token)  history.push("/notes");
+    })
 
-  const history = useHistory();
 
-  const HandleSubmit = async (evt) => {
-    evt.preventDefault();
 
-    try {
-      const response = await login({ email: email, password: password });
-      setState({
-        user: response.data.user,
-        token: response.data.token,
-      });
-      localStorage.setItem('auth', JSON.stringify(response.data));
 
-      history.push("/notes");
-    } catch (error) {
-        console.log(error);
-      setError(true);
+    const HandleSubmit = async (evt) => {
+        evt.preventDefault();
+
+        try {
+        setLoading(true);
+
+        const response = await login({ email: email, password: password });
+        setState({
+            user: response.data.user,
+            token: response.data.token,
+        });
+        localStorage.setItem('auth', JSON.stringify(response.data));
+        setLoading(false);
+        history.push("/notes");
+        } catch (err) {
+        toast.error(err.response.data);
+        setLoading(false);
+
+        }
     }
-  }
-
-//   if (state && state.token) {
-
-//       return (<Redirect to='/notes' key={location.key}/>);
-//   }
 
 
-  return (
-    <Wrapper>
-        <ContentWrapper>
-          <form onSubmit={HandleSubmit}>
-            <div>
-              <div>
-                <Label size="small">Email:</Label>
+
+
+    return (
+        <Wrapper>
+            <LogoWrapper style={{ position: 'relative', top: "20px" , left: "20px"}}>
+             <Link to="/" >
+                <img src="/images/logos/logo.svg" alt="Logo" />
+            </Link>
+            </LogoWrapper>
+            <ContentWrapper>
+            <form onSubmit={HandleSubmit}>
                 <div>
-                  <Input
-                    type="email"
-                    required
-                    name="email"
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
-                  />
-                </div>
-              </div>
-              <div>
-                <Label size="small">Password:</Label>
                 <div>
-                  <Input
-                    type="password"
-                    required
-                    name="password"
-                    value={password}
-                    onChange={e => setPassword(e.target.value)}
-                  />
-                </div>
-              </div>
-              <div>
-                <div>
-                  <div>
+                    <Label size="small">Email:</Label>
                     <div>
-                      <a href="/register">Register or</a>
+                    <Input
+                        type="email"
+                        required
+                        name="email"
+                        value={email}
+                        onChange={e => setEmail(e.target.value)}
+                    />
                     </div>
-                    <div>
-                      <Button>Login</Button>
-                    </div>
-                  </div>
                 </div>
-                {error && <div>Email or Password invalid</div>}
-              </div>
-            </div>
-          </form>
-        </ContentWrapper>
-    </Wrapper>
-  )
+                <div>
+                    <Label size="small">Password:</Label>
+                    <div>
+                    <Input
+                        type="password"
+                        required
+                        name="password"
+                        value={password}
+                        onChange={e => setPassword(e.target.value)}
+                    />
+                    </div>
+                </div>
+                <div>
+                    <div>
+                    <BtnWrapper>
+                        <div>
+                        <Button disabled={loading}>Login</Button>
+                        </div>
+                        <div>
+                        <a href="/register">Or register</a>
+                        </div>
+                    </BtnWrapper>
+                    </div>
+                </div>
+                </div>
+            </form>
+            </ContentWrapper>
+        </Wrapper>
+    )
 }
 
 
 const ContentWrapper = styled.div`
-  /* max-width: 1234px; */
-  margin: 0 auto;
-  padding: 200px 30px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    padding: 200px 30px;
+    display: flex;
+    justify-content: center;
 `
 const Wrapper = styled.div``;
+const LogoWrapper = styled.div``;
 
 const Label = styled.label``;
 
-const Input = styled.input``;
+const Input = styled.input`
 
-const Button = styled.button``;
+font-size: 14px;
+width: 500px;
+height: 40px;
+border-radius: 5px;
+
+&:focus {
+  outline-color: ${themes.light.secondary};
+}
+
+
+`;
+
+const BtnWrapper = styled.div`
+    padding: 50px 0;
+    display: flex;
+    justify-content: space-between;
+`;
+
+
+const Button = styled.button`
+padding: -40px;
+width: 200px;
+height: 40px;
+cursor: pointer;
+
+background-color: ${themes.light.secondary};
+border-radius: 5px;
+
+`;
 export default LoginPage;

@@ -15,7 +15,6 @@ const WithAuth = async (req, res, next) => {
                 req.email = decoded.email;
                 User.findOne({email: decoded.email}).then(user => {
                     req.user = user;
-                    console.log(user);
                     next();
                 })
                 .catch(err => {

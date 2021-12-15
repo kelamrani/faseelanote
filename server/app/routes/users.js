@@ -8,7 +8,6 @@ const withAuth = require('../middlewares/auth')
 
 
 router.post('/register', async function(req, res) {
-        // console.log("REGISTER ENDPOINT => ", req.body);
         const { name, email, password } = req.body;
         // validation
         if (!name) return res.status(400).send("Name is required");
@@ -24,7 +23,6 @@ router.post('/register', async function(req, res) {
         const user = new User({ name, email, password: hashedPassword });
         try {
         await user.save();
-        // console.log("REGISTERED USE => ", user);
         return res.json({
             ok: true,
         });
@@ -37,7 +35,6 @@ router.post('/register', async function(req, res) {
 
   router.post('/login', async (req, res) => {
 
-            // console.log(req.body);
         try {
             const { email, password } = req.body;
             // check if our db has user with that email

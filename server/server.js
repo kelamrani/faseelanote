@@ -55,10 +55,10 @@ app.use('/notes', notesRouter);
 
 // socketio
 io.on("connect", (socket) => {
-    console.log("SOCKET>IO", socket.id);
+    // console.log("SOCKET>IO", socket.id);
     // For given noteId:
     socket.on("get-document", async noteId => {
-        const document = await findDocument(noteId) //DB (refer helper function)
+        const document = await findDocument(noteId) //DB (refer helper function below)
     socket.join(noteId); //isolating into "own" room
     socket.emit("load-document", document.body)
 

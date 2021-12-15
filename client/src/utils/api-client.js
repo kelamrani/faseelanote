@@ -3,7 +3,7 @@ import axios from "axios";
 const client = axios.create({baseURL: "http://localhost:8000"});
 
 
-export const register = async (params) => { await client.post("/users/register", params)};
+export const register = async (params) => { return await client.post("/users/register", params)};
 
 export const login = async (params) => {
   return await client.post('users/login', params);
@@ -16,7 +16,6 @@ export const indexUsers = async () => {
     const { data } = await client.get("/users", {
         headers: {'x-access-token': token}
         });
-    // console.log(data);
     return data;
 
 }
@@ -37,7 +36,6 @@ export const indexNotes = async () => {
     const {data} = await client.get('/notes', {
     headers: {'x-access-token': token}
     });
-    console.log(data);
     return data;
 }
 
@@ -48,7 +46,6 @@ export const indexTrash = async () => {
     const {data} = await client.get('/notes/trash', {
     headers: {'x-access-token': token}
     });
-    console.log(data);
     return data;
 }
 
@@ -59,7 +56,6 @@ export const indexShared = async () => {
     const {data} = await client.get('/notes/shared-with-me', {
     headers: {'x-access-token': token}
     });
-    console.log(data);
     return data;
 }
 
@@ -68,7 +64,7 @@ export const createNote = async () => {
     let token;
     let auth = JSON.parse(localStorage.getItem('auth')) || null ;
     token = auth.token;
-    const {data} = await client.post('/notes', {'title': 'New Note', 'body': ''}, {
+    const {data} = await client.post('/notes', {'title': '', 'body': ''}, {
     headers: {'x-access-token': token}
     });
     return data;

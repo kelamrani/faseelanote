@@ -1,50 +1,39 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArchive, faBackward, faTrash, faShareSquare } from '@fortawesome/free-solid-svg-icons'
+import { faArchive, faBackward, faTrash } from '@fortawesome/free-solid-svg-icons'
 import './Note.css';
-import {
-    useLocation,
-    useParams,
-    useHistory
-} from "react-router-dom";
+import { useParams,useHistory } from "react-router-dom";
 
 import { NotesContext } from './../../../context/NotesContext';
+import { UserContext } from '../../../context/UserContext';
 import { noteFormatDate } from './../../../utils/helpers';
 import { deleteNote, updateNote } from '../../../utils/api-client';
-import ReactQuill from 'react-quill'; // ES6
-import 'react-quill/dist/quill.snow.css'; // ES6
 import TextEditor from '../TextEditor/TextEditor';
 import Share from '../DropDowns/Share';
+import { toast } from 'react-toastify';
 
 
 const Note = () => {
     const history = useHistory();
-    const location = useLocation();
+    const [state] = useContext(UserContext);
     const params = useParams();
     const [title, setTitle] = useState('');
-    // const [body, setBody] = useState('');
     const notesContext = useContext(NotesContext);
     const [updatedAt, setUpdatedAt] = useState('');
     const [isArchive, setIsArchive] = useState(0);
+    const [isShared, setIsShared] = useState(false);
     const [error, setError] = useState(null);
 
-    // useEffect(() => {
-    //     if (location.note) {
-    //         setTitle(location.note.title)
-    //         // setBody(location.note.body)
-    //         setUpdatedAt(location.note.updated_at)
-    //         setIsArchive(location.note.archive)
-    //     }
-    // }, [location.note])
+
 
     useEffect(() => {
         if (notesContext.notesState.length > 0) {
             const [selectednote] = notesContext.notesState.filter((e) => e._id === params.id);
             if (selectednote) {
-                setTitle(selectednote.title)
-                // setBody(selectednote.body)
-                setUpdatedAt(selectednote.updated_at)
-                setIsArchive(selectednote.archive)
+                setTitle(selectednote.title);
+                setUpdatedAt(selectednote.updated_at);
+                setIsArchive(selectednote.archive);
+                setIsShared( selectednote.sharedwith.length > 0 && selectednote.author !== state.user._id );
             }
         }
     }, [notesContext.notesState])
@@ -53,29 +42,25 @@ const Note = () => {
         setTitle(e.target.value)
     }
 
-    // const handleBodyChange = (e) => {
-    //     setBody(e)
-    // }
+
 
     const handleUpdateTitle = async () => {
         let query = {};
         query['title'] = title;
-        // query['body'] = body;
 
 
         const response = await updateNote (params.id, query);
         if (response?.error) {
             setError(response.error);
+            toast.error(error);
             return false;
         }
-        // notesContext.notesDispatch({ type: 'updateNoteSuccess', payload: response, id: params.id });
 
     }
 
     const handleArchiveNote = async () => {
         let query = {};
         query['title']=title;
-        // query['body']=body;
         query['archive']=1;
         const response = await updateNote (params.id, query);
         if (response?.error) {
@@ -87,16 +72,10 @@ const Note = () => {
         history.push(`/notes/all-notes`)
     }
 
-    const handleShareNote = async () => {
-
-        resetState();
-        history.push(`/notes/all-notes`)
-    }
 
     const handleUnArchiveNote = async () => {
         let query = {};
         query['title']=title;
-        // query['body']=body;
         query['archive']=0;
         const response = await updateNote (params.id, query);
         if (response?.error) {
@@ -121,7 +100,6 @@ const Note = () => {
 
     const resetState = () => {
         setTitle('');
-        // setBody('');
         setUpdatedAt('');
         setIsArchive(0);
         setError(null);
@@ -134,7 +112,7 @@ const Note = () => {
                     Last edited on {noteFormatDate(updatedAt)}
                 </div>
                 <div className="note__header-action-btn">
-                    {!isArchive ?
+                    {isShared ? <></> : (!isArchive ?
                     (
                         <>
                         <div className="action-btn">
@@ -154,7 +132,7 @@ const Note = () => {
                                 <FontAwesomeIcon icon={faTrash} />
                             </div>
                         </>
-                    )}
+                    ))}
                 </div>
             </div>
             <div className="note__body">
@@ -163,7 +141,6 @@ const Note = () => {
                 </div>
                 <div className="note__body-content">
                     <TextEditor noteId={params.id}/>
-                    {/* <ReactQuill theme="snow" value={body} placeholder="Start writing" onChange={handleBodyChange} onBlur={() => handleUpdateNote('')} /> */}
                 </div>
             </div>
         </div>

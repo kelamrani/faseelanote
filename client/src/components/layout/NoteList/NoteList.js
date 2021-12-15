@@ -1,47 +1,46 @@
 import React, { useEffect, useState, useContext } from 'react';
 import './NoteList.css';
-import {
-    useRouteMatch,
-    useHistory,
-    NavLink
-} from "react-router-dom";
+import { useRouteMatch,NavLink } from "react-router-dom";
 import { NotesContext } from './../../../context/NotesContext';
 import { listFormatDate } from './../../../utils/helpers';
 import { indexNotes, indexTrash, indexShared } from '../../../utils/api-client';
+import { toast } from 'react-toastify';
+
+
 
 const NoteList = (props) => {
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null)
     const notesContext = useContext(NotesContext);
     const { title } = props;
     const match = useRouteMatch();
-    const history = useHistory();
     useEffect(() => {
         getNotes()
     }, [match.url])
 
     const getNotes = async () => {
         let response;
-        if (match.url == '/notes/all-notes') {
+        setLoading(true);
+        if (match.url === '/notes/all-notes') {
             response = await indexNotes();
-        } else if (match.url == '/notes/trash') {
+        } else if (match.url === '/notes/trash') {
             response = await indexTrash();
-        } else if (match.url == '/notes/shared-with-me') {
+        } else if (match.url === '/notes/shared-with-me') {
             response = await indexShared();
         } else {
+            setLoading(false);
             return;
         }
 
         if (response.error) {
             setError(response.error);
+            setLoading(false);
+            toast.error(error);
             return false;
         }
         notesContext.notesDispatch({ type: 'getAllNotesSuccess', payload: response });
-        // if (response.length > 0) {
-        //     history.push({
-        //         pathname: `${match.url}/${response[0]._id}`,
-        //         note: response[0]
-        //     })
-        // }
+        setLoading(false);
+
     }
 
     return (
@@ -51,14 +50,14 @@ const NoteList = (props) => {
                     <h1>{title}</h1>
                 </div>
                 <div className="note-list__header-sub-head">
-                    <div className="note-count">
-                        {notesContext.notesState.length} note
+                    <div style={{ fontSize: '22px'}} >
+                        {notesContext.notesState.length} Notes
                     </div>
                 </div>
             </div>
             <div className="note-list__body">
                 {
-                    notesContext.notesState.length > 0 ? notesContext.notesState.map((note) => (
+                    loading ? <div>Loading...</div> : (notesContext.notesState.length > 0 ? notesContext.notesState.map((note) => (
                         <NavLink key={note._id} className="note-card" to={
                             {
                                 pathname: `${match.url}/${note._id}`,
@@ -69,16 +68,13 @@ const NoteList = (props) => {
                                 <div className="note-card__title">
                                     {note.title}
                                 </div>
-                                {/* <div className="note-card__desc">
-                                    {note.body}
-                                </div> */}
                             </div>
                             <div className="note-card__date">
                                 {listFormatDate(note.updated_at)}
                             </div>
                         </NavLink>
                     )
-                    ) : <div className="empty-state">No data found</div>
+                    ) : <div style={{display:'flex', justifyContent:'center', padding: '10px'}}>you have 0 notes in this folder</div>)
                 }
             </div>
         </div>
